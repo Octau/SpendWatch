@@ -25,7 +25,7 @@ public class ModifyBalance {
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
     public ModifyBalance(Context context) throws FileNotFoundException, IOException {
-        path = new File(Environment.getExternalStorageDirectory()+"/balance");
+        path = new File(context.getFilesDir().getPath()+"/balance");
         file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
         Log.i("File", "go");
         if(!path.exists()){
@@ -53,6 +53,7 @@ public class ModifyBalance {
     public void deleteLine(Integer id) throws IOException{
         writerNew();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        refreshList();
         for (BalanceFlow bf : getListBalance()) {
             if(bf.id != id) writer.write(String.format("%d;%s;%d;%s\n", bf.id, bf.desc, bf.balance, sdf.format(bf.date)));
         }
@@ -62,6 +63,7 @@ public class ModifyBalance {
     public void editLine(Integer id, String desc, Integer balance, Date date)  throws IOException{
         writerNew();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        refreshList();
         for (BalanceFlow bf : getListBalance()) {
             if(bf.id != id) writer.write(String.format("%d;%s;%d;%s\n", bf.id, bf.desc, bf.balance, sdf.format(bf.date)));
             else writer.write(String.format("%d;%s;%d;%s\n", bf.id, desc, balance, sdf.format(date)));
@@ -88,5 +90,12 @@ public class ModifyBalance {
             }
             n++;
         }
+    }
+
+    public void refreshList() throws FileNotFoundException {
+        listBalance = new ArrayList<BalanceFlow>();
+        arrayListBalance = new ArrayList<BalanceFlow>();
+        sc = new Scanner(file);
+        addToListBalance();
     }
 }

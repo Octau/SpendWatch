@@ -25,7 +25,7 @@ public class ReadBalance{
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
     public ReadBalance(Context context) throws IOException{
-        path = new File(Environment.getExternalStorageDirectory()+"/balance");
+        path = new File(context.getFilesDir().getPath()+"/balance");
         file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
         Log.i("File", "go");
         if(!path.exists()){
@@ -66,6 +66,12 @@ public class ReadBalance{
         Log.i("FETCH", "fetched " + n + " line");
     }
 
+    public void refreshList() throws FileNotFoundException {
+        listBalance = new ArrayList<BalanceFlow>();
+        arrayListBalance = new ArrayList<BalanceFlow>();
+        sc = new Scanner(file);
+        addToListBalance();
+    }
     public Integer[] getThisMonthTotal(){
         Date current_date = new Date();
         Integer totalFlow = 0;

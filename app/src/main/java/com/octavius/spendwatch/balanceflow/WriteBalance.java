@@ -15,7 +15,7 @@ public class WriteBalance{
     private File file, path;
 
     public WriteBalance(Context context) throws FileNotFoundException, IOException{
-        path = new File(Environment.getExternalStorageDirectory()+"/balance");
+        path = new File(context.getFilesDir().getPath()+"/balance");
         file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
         Log.i("File", "go");
         if(!path.exists()){

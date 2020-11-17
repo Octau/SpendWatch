@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private FrameLayout frame_layout;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottom_navigation_view = findViewById(R.id.bn_main);
         bottom_navigation_view.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment());
-
     }
 
     @Override

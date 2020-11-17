@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.octavius.spendwatch.balanceflow.BalanceFlow;
 import com.octavius.spendwatch.balanceflow.ReadBalance;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,26 @@ public class HistoryFragment extends Fragment {
         }
         daftar = rb.getArrayListBalance();
 
-        adapter = new BalanceFlowAdapter(daftar, getContext());
-        listView.setAdapter(adapter);
-
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            rb.refreshList();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        daftar = null;
+        daftar = rb.getArrayListBalance();
+        if(daftar == null) Log.i("list", "null");
+        for (BalanceFlow item: daftar) {
+            Log.i("item", "onResume: " + item.getDesc());
+        }
+        listView.setAdapter(null);
+        adapter = new BalanceFlowAdapter(daftar, getContext());
+        listView.setAdapter(adapter);
+
+    }
 }
