@@ -1,12 +1,15 @@
 package com.octavius.spendwatch.balanceflow;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,16 +18,25 @@ import java.util.Scanner;
 
 public class ModifyBalance {
     private FileWriter writer;
-    private File file;
+    private File file, path;
     private Scanner sc;
     private String[] parsed;
     private List<BalanceFlow> listBalance = new ArrayList<BalanceFlow>();
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
     public ModifyBalance(Context context) throws FileNotFoundException, IOException {
-        file = new File(context.getFilesDir().getPath().toString() + "/balance/BalanceFlow.txt");
+        path = new File(Environment.getExternalStorageDirectory()+"/balance");
+        file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
+        Log.i("File", "go");
+        if(!path.exists()){
+            path.mkdirs();
+            if(path.isDirectory()){
+                Log.i("File", "created dir");
+            }
+        }
         if(!file.exists()){
             file.createNewFile();
+            Log.i("File", "File created");
         }
         sc = new Scanner(file);
         this.addToListBalance();

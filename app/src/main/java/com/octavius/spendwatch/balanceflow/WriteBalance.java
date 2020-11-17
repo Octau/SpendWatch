@@ -1,6 +1,7 @@
 package com.octavius.spendwatch.balanceflow;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -11,12 +12,21 @@ import java.io.IOException;
 public class WriteBalance{
     //private BalanceFlow bf;
     private FileWriter writer; 
-    private File file;
+    private File file, path;
 
     public WriteBalance(Context context) throws FileNotFoundException, IOException{
-        file = new File(context.getFilesDir().getPath() + "/balance/BalanceFlow.txt");
+        path = new File(Environment.getExternalStorageDirectory()+"/balance");
+        file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
+        Log.i("File", "go");
+        if(!path.exists()){
+            path.mkdirs();
+            if(path.isDirectory()){
+                Log.i("File", "created dir");
+            }
+        }
         if(!file.exists()){
             file.createNewFile();
+            Log.i("File", "File created");
         }
     }
     

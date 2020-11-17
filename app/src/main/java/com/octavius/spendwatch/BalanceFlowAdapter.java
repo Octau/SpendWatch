@@ -61,8 +61,16 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
         lastPosition = position;
 
         viewHolder.id.setText(bf.getId().toString());
+
         viewHolder.desc.setText(bf.getDesc());
         viewHolder.balance.setText(bf.getBalance().toString());
+        if(bf.getBalance() > 0) {
+            viewHolder.balance.setText("+" + viewHolder.balance.getText().toString());
+            viewHolder.balance.setTextColor(getContext().getColor(R.color.colorBalanceGreen));
+        }
+        else if(bf.getBalance() < 0){
+            viewHolder.balance.setTextColor(getContext().getColor(R.color.colorBalanceRed));
+        }
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

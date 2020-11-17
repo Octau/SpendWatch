@@ -2,6 +2,7 @@ package com.octavius.spendwatch.balanceflow;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -19,14 +20,23 @@ import java.util.Date;
 public class ReadBalance{
     private Scanner sc;
     private String[] parsed;
-    private File file;
+    private File file, path;
     private List<BalanceFlow> listBalance = new ArrayList<BalanceFlow>();
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
-    public ReadBalance(Context context) throws FileNotFoundException, IOException{
-        file = new File(context.getFilesDir().getPath().toString() + "/balance/BalanceFlow.txt");
+    public ReadBalance(Context context) throws IOException{
+        path = new File(Environment.getExternalStorageDirectory()+"/balance");
+        file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
+        Log.i("File", "go");
+        if(!path.exists()){
+            path.mkdirs();
+            if(path.isDirectory()){
+                Log.i("File", "created dir");
+            }
+        }
         if(!file.exists()){
             file.createNewFile();
+            Log.i("File", "File created");
         }
         sc = new Scanner(file);
         this.addToListBalance();

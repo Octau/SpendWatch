@@ -7,4 +7,6 @@
     // nav bar
     <color name="colorNavigationIcon">#dae9f6</color>
     <color name="colorNavigationText">#ffffff</color>
+    <color name="colorBalanceRed">#ff3300</color>
+    <color name="colorBalanceGreen">#13d436</color>
 </resources>
