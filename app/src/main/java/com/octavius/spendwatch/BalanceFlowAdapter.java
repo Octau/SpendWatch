@@ -52,7 +52,7 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
             viewHolder.id = (TextView) convertView.findViewById(R.id.bf_id);
             viewHolder.desc = (TextView) convertView.findViewById(R.id.tv_desc_info);
             viewHolder.balance = (TextView) convertView.findViewById(R.id.tv_balance_info);
-            viewHolder.delete = (ImageView) convertView.findViewById(R.id.btnDelete);
+            viewHolder.delete = (ImageView) convertView.findViewById(R.id.btn_delete);
             convertView.setTag(viewHolder);
         }
         else{

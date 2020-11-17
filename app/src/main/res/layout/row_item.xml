@@ -32,7 +32,16 @@
         android:layout_height="wrap_content"
         android:textSize="0sp"/>
     <ImageView
-        android:id="@+id/btnDelete"
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_delete"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_edit"
+        android:paddingRight="5dp"/>
+
+    <ImageView
+        android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
