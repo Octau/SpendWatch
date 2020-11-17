@@ -53,22 +53,30 @@ public class ModifyBalance {
     public void deleteLine(Integer id) throws IOException{
         writerNew();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        refreshList();
+        //refreshList();
+        Integer n=0;
         for (BalanceFlow bf : getListBalance()) {
-            if(bf.id != id) writer.write(String.format("%d;%s;%d;%s\n", bf.id, bf.desc, bf.balance, sdf.format(bf.date)));
+            n++;
+            Log.i("Modify", "line"+n);
+            Log.i("Modify", "deleteLine: id->" + bf.id.toString());
+            if(bf.id != id){
+                writer.write(String.format("%d;%s;%d;%s\n", bf.id, bf.desc, bf.balance, sdf.format(bf.date)));
+            }
         }
         writerClose();
+        Log.i("modify", "deleteLine: Success");
     }
 
-    public void editLine(Integer id, String desc, Integer balance, Date date)  throws IOException{
+    public void editLine(Integer id, String desc, Integer balance, String date)  throws IOException{
         writerNew();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        refreshList();
+        //refreshList();
         for (BalanceFlow bf : getListBalance()) {
             if(bf.id != id) writer.write(String.format("%d;%s;%d;%s\n", bf.id, bf.desc, bf.balance, sdf.format(bf.date)));
-            else writer.write(String.format("%d;%s;%d;%s\n", bf.id, desc, balance, sdf.format(date)));
+            else writer.write(String.format("%d;%s;%d;%s\n", bf.id, desc, balance, date));
         }
         writerClose();
+        Log.i("Modify", "editLine: Success");
     }
 
     public List<BalanceFlow> getListBalance(){

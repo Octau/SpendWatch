@@ -21,6 +21,7 @@ public class ReadBalance{
     private Scanner sc;
     private String[] parsed;
     private File file, path;
+    private Integer tmp=0, lastId=0;
     private List<BalanceFlow> listBalance = new ArrayList<BalanceFlow>();
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
@@ -53,16 +54,21 @@ public class ReadBalance{
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             parsed = line.trim().split(";");
+            Integer curr_id = Integer.parseInt(parsed[0]);
             try{
+                Date curr_date = sdf.parse(parsed[3]);
                 //id, desc, balance ,date
-                listBalance.add(new BalanceFlow(Integer.parseInt(parsed[0]), parsed[1], Integer.parseInt(parsed[2]), sdf.parse(parsed[3])));
-                arrayListBalance.add(new BalanceFlow(Integer.parseInt(parsed[0]), parsed[1], Integer.parseInt(parsed[2]), sdf.parse(parsed[3])));
+                listBalance.add(new BalanceFlow(curr_id, parsed[1], Integer.parseInt(parsed[2]), curr_date));
+                arrayListBalance.add(new BalanceFlow(curr_id, parsed[1], Integer.parseInt(parsed[2]), curr_date));
             }
             catch(Exception e){
                 System.out.println(e);
             }
+
+            tmp = curr_id;
             n++;
         }
+        lastId = tmp;
         Log.i("FETCH", "fetched " + n + " line");
     }
 
@@ -88,6 +94,10 @@ public class ReadBalance{
         }
         Integer[] stats = {totalFlow, totalSpending, totalBalance};
         return stats;
+    }
+
+    public Integer getLastId() {
+        return lastId;
     }
 }
 

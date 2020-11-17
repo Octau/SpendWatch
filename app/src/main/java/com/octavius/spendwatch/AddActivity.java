@@ -1,10 +1,7 @@
 package com.octavius.spendwatch;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -14,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.octavius.spendwatch.balanceflow.ReadBalance;
 import com.octavius.spendwatch.balanceflow.WriteBalance;
 
 import java.io.IOException;
@@ -21,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity{
+    private ReadBalance rb;
     private WriteBalance wb;
     private EditText desc, balance;
     private DatePicker date;
@@ -42,9 +41,17 @@ public class AddActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_form);
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            rb = new ReadBalance(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        rb.getArrayListBalance();
+
         desc = findViewById(R.id.et_desc);
         desc.setFilters(new InputFilter[]{filter});
         balance = findViewById(R.id.et_balance);
@@ -77,7 +84,7 @@ public class AddActivity extends AppCompatActivity{
         switch (item.getItemId()) {
             case R.id.action_add:
                 // User chose the "Settings" item, show the app settings UI...
-                wb.addBalance(1, desc.getText().toString(), Integer.parseInt(balance.getText().toString()), date.getDayOfMonth() + "-" + (Integer)(date.getMonth()+1) + "-" + date.getYear());
+                wb.addBalance(rb.getLastId()+1, desc.getText().toString(), Integer.parseInt(balance.getText().toString()), date.getDayOfMonth() + "-" + (Integer)(date.getMonth()+1) + "-" + date.getYear());
                 finish();
                 return true;
 
