@@ -22,7 +22,7 @@ public class ModifyBalance {
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
     public ModifyBalance(Context context) throws FileNotFoundException, IOException {
-        file = new File(context.getFilesDir().getPath().toString() + "/BalanceFlow.txt");
+        file = new File(context.getFilesDir().getPath().toString() + "/balance/BalanceFlow.txt");
         if(!file.exists()){
             file.createNewFile();
         }

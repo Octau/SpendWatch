@@ -1,6 +1,7 @@
 package com.octavius.spendwatch.balanceflow;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +14,7 @@ public class WriteBalance{
     private File file;
 
     public WriteBalance(Context context) throws FileNotFoundException, IOException{
-        file = new File(context.getFilesDir().getPath().toString() + "/BalanceFlow.txt");
+        file = new File(context.getFilesDir().getPath() + "/balance/BalanceFlow.txt");
         if(!file.exists()){
             file.createNewFile();
         }
@@ -33,7 +34,7 @@ public class WriteBalance{
             writer.write(String.format("%d;%s;%d;%s\n", id, desc, balance, date));
             this.writerClose();
         } catch (IOException e) {
-            System.out.println(e);
+            Log.i("AddError", e.toString());
         }
     }
 

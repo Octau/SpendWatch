@@ -24,7 +24,7 @@ public class ReadBalance{
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
 
     public ReadBalance(Context context) throws FileNotFoundException, IOException{
-        file = new File(context.getFilesDir().getPath().toString() + "/BalanceFlow.txt");
+        file = new File(context.getFilesDir().getPath().toString() + "/balance/BalanceFlow.txt");
         if(!file.exists()){
             file.createNewFile();
         }

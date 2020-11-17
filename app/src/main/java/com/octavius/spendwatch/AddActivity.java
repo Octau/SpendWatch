@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,11 +20,25 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity{
     private WriteBalance wb;
     private EditText desc, balance;
     private DatePicker date;
     private SimpleDateFormat sdf;
+
+    private String blockCharacterSet = ";";
+
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +46,7 @@ public class AddActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         desc = findViewById(R.id.et_desc);
+        desc.setFilters(new InputFilter[]{filter});
         balance = findViewById(R.id.et_balance);
         date = findViewById(R.id.dp_date);
         date.setMaxDate(Calendar.getInstance().getTimeInMillis());
