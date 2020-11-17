@@ -1,6 +1,7 @@
 package com.octavius.spendwatch;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.octavius.spendwatch.balanceflow.BalanceFlow;
 import com.octavius.spendwatch.balanceflow.ModifyBalance;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 
 public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements View.OnClickListener
 {
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private ModifyBalance mb;
     private int lastPosition = -1;
     private ArrayList<BalanceFlow> dataSet;
@@ -50,9 +54,11 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.id = (TextView) convertView.findViewById(R.id.bf_id);
+            viewHolder.date = (TextView) convertView.findViewById(R.id.tv_date);
             viewHolder.desc = (TextView) convertView.findViewById(R.id.tv_desc_info);
             viewHolder.balance = (TextView) convertView.findViewById(R.id.tv_balance_info);
             viewHolder.delete = (ImageView) convertView.findViewById(R.id.btn_delete);
+            viewHolder.edit = (ImageView) convertView.findViewById(R.id.btn_edit);
             convertView.setTag(viewHolder);
         }
         else{
@@ -64,11 +70,15 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
 
         viewHolder.desc.setText(bf.getDesc());
         viewHolder.balance.setText(bf.getBalance().toString());
+        viewHolder.date.setText(sdf.format(bf.getDate()));
+
+        //viewHolder.date.setText(bf.getDate().toString());
         if(bf.getBalance() > 0) {
-            viewHolder.balance.setText("+" + viewHolder.balance.getText().toString());
+            viewHolder.balance.setText("+ Rp. " + viewHolder.balance.getText().toString());
             viewHolder.balance.setTextColor(getContext().getColor(R.color.colorBalanceGreen));
         }
         else if(bf.getBalance() < 0){
+            viewHolder.balance.setText("- Rp. " + Math.abs(bf.getBalance()));
             viewHolder.balance.setTextColor(getContext().getColor(R.color.colorBalanceRed));
         }
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +97,18 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
                 remove(getItem(position));
             }
         });
+
+        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return convertView;
     }
 
     private static class ViewHolder {
-        private TextView desc, balance, id;
-        private ImageView delete;
+        private TextView desc, balance, id, date;
+        private ImageView delete, edit;
     }
 }
