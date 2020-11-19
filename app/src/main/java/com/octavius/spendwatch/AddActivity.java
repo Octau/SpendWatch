@@ -2,6 +2,7 @@ package com.octavius.spendwatch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -12,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.octavius.spendwatch.balanceflow.BalanceProfile;
 import com.octavius.spendwatch.balanceflow.ReadBalance;
 import com.octavius.spendwatch.balanceflow.WriteBalance;
 
@@ -26,7 +28,9 @@ public class AddActivity extends AppCompatActivity{
     private DatePicker dp_date;
     private SimpleDateFormat sdf;
     private TextView tv_error;
-    private String block_character_set = ";";
+    private String block_character_set = ";", file_name;
+    private BalanceProfile bp;
+
 
     private InputFilter filter = new InputFilter() {
 
@@ -39,6 +43,7 @@ public class AddActivity extends AppCompatActivity{
         }
     };
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +51,13 @@ public class AddActivity extends AppCompatActivity{
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         try {
-            rb = new ReadBalance(getApplicationContext());
+            bp = new BalanceProfile(getApplicationContext());
+            file_name = bp.getConfigFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            rb = new ReadBalance(getApplicationContext(), file_name);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +72,13 @@ public class AddActivity extends AppCompatActivity{
         dp_date.setMaxDate(Calendar.getInstance().getTimeInMillis());
         sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            wb = new WriteBalance(getApplicationContext());//show back button
+            bp = new BalanceProfile(getApplicationContext());
+            file_name = bp.getConfigFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            wb = new WriteBalance(getApplicationContext(), file_name);//show back button
         } catch (IOException e) {
             e.printStackTrace();
         }

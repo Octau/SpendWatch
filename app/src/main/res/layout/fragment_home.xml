@@ -2,54 +2,136 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_kas_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Kas Bulan ini"
-        android:layout_centerInParent="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-    <TextView
-        android:id="@+id/tv_kas_bulan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/tv_kas_info"
-        android:text="Angka Kas"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
-    <TextView
-        android:id="@+id/tv_total_kas_info"
-        android:layout_width="wrap_content"
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/frame_total"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/tv_kas_bulan"
-        android:text="Total Kas"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-    <TextView
-        android:id="@+id/tv_total_kas"
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20sp"
+        app:cardBackgroundColor="@color/colorLightGray"
+        app:cardCornerRadius="8dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="20sp">
+            <ImageView
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:src="@drawable/ic_money"
+                app:tint="@color/colorWhite" />
+            <TextView
+                android:id="@+id/tv_total_kas_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Balance"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/tv_total_balance_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Rp. xxxxx"
+                android:textSize="35sp"
+                android:textColor="@color/colorWhite"
+                />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_below="@id/frame_total"
+        android:id="@+id/frame_total_this_month"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/tv_total_kas_info"
-        android:text="Angka Kas"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-    <TextView
-        android:id="@+id/tv_pengeluaran_bulan_info"
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20sp"
+        app:cardBackgroundColor="@color/colorLightGray"
+        app:cardCornerRadius="8dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="20sp">
+            <ImageView
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:src="@drawable/ic_add_circle"
+                app:tint="@color/colorWhite" />
+            <TextView
+                android:id="@+id/tv_total_balance_this_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This Month Total Balance"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/tv_total_balance_this_month_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Rp. XXXXX"
+                android:textSize="35sp"
+                android:textColor="@color/colorWhite"
+                />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_below="@id/frame_total_this_month"
+        android:id="@+id/frame_spending_this_month"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/tv_total_kas"
-        android:text="Total Pengeluaran Bulan ini"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-    <TextView
-        android:id="@+id/tv_pengeluaran_bulan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/tv_pengeluaran_bulan_info"
-        android:text="Angka Kas"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20sp"
+        app:cardBackgroundColor="@color/colorBalanceRed"
+        app:cardCornerRadius="8dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="20sp">
+            <ImageView
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:src="@drawable/ic_remove"
+                app:tint="@color/colorWhite" />
+            <TextView
+                android:id="@+id/tv_spending_this_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This Month Spending"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/tv_spending_this_month_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Rp. XXXXX"
+                android:textSize="35sp"
+                android:textColor="@color/colorWhite"
+                />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

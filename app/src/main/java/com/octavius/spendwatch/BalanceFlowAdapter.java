@@ -1,5 +1,6 @@
 package com.octavius.spendwatch;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -15,12 +16,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.octavius.spendwatch.balanceflow.BalanceFlow;
+import com.octavius.spendwatch.balanceflow.BalanceProfile;
 import com.octavius.spendwatch.balanceflow.ModifyBalance;
 
 public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements View.OnClickListener
 {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private ModifyBalance mb;
+    private BalanceProfile bp;
+    private String file_name;
     private int lastPosition = -1;
     private ArrayList<BalanceFlow> dataSet;
     private Context mContext;
@@ -33,16 +37,13 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
 
     @Override
     public void onClick(View v) {
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        Toast.makeText(mContext, "Info at " + (position+1), Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         BalanceFlow bf = getItem(position);
         final ViewHolder viewHolder;
-        final View result;
         if (convertView == null)
         {
             viewHolder = new ViewHolder();
@@ -84,7 +85,13 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
             @Override
             public void onClick(View v) {
                 try {
-                    mb = new ModifyBalance(getContext());
+                    bp = new BalanceProfile(getContext());
+                    file_name = bp.getConfigFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    mb = new ModifyBalance(getContext(), file_name);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -96,7 +103,6 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
                 remove(getItem(position));
             }
         });
-        Intent newActivity1 = new Intent(this.getContext() , AddActivity.class);
         viewHolder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

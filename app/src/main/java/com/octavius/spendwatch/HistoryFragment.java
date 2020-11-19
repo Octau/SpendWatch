@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.octavius.spendwatch.balanceflow.BalanceFlow;
+import com.octavius.spendwatch.balanceflow.BalanceProfile;
 import com.octavius.spendwatch.balanceflow.ReadBalance;
 
 import java.io.FileNotFoundException;
@@ -23,15 +24,22 @@ public class HistoryFragment extends Fragment {
     private ListView listView;
     private BalanceFlowAdapter adapter;
     private ReadBalance rb;
+    private BalanceProfile bp;
+    private String file_name;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         listView = (ListView) view.findViewById(R.id.list);
-
         try {
-            rb = new ReadBalance(getContext());
+            bp = new BalanceProfile(getContext());
+            file_name = bp.getConfigFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            rb = new ReadBalance(getContext(), file_name);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -24,12 +24,13 @@ public class ReadBalance{
     private String[] parsed;
     private File file, path;
     private Integer tmp=0, lastId=0;
-    private List<BalanceFlow> listBalance = new ArrayList<BalanceFlow>();
+    private List<BalanceFlow> listBalance = new ArrayList<BalanceFlow>(), current_month_list;
     private ArrayList<BalanceFlow> arrayListBalance = new ArrayList<BalanceFlow>();
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-    public ReadBalance(Context context) throws IOException{
+    public ReadBalance(Context context, String file_name) throws IOException{
         path = new File(context.getFilesDir().getPath()+"/balance");
-        file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
+        file = new File(context.getFilesDir().getPath()+ "/balance/" + file_name + ".txt");
         Log.i("File", "go");
         if(!path.exists()){
             path.mkdirs();
@@ -41,8 +42,8 @@ public class ReadBalance{
             file.createNewFile();
             Log.i("File", "File created");
         }
-        sc = new Scanner(file);
         this.addToListBalance();
+        this.fetchThisMonthBalance();
     }
 
     public List<BalanceFlow> getListBalance(String mode){
@@ -54,9 +55,9 @@ public class ReadBalance{
         return arrayListBalance;
     }
 
-    private void addToListBalance(){
+    private void addToListBalance() throws FileNotFoundException {
+        sc = new Scanner(file);
         Integer n=0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             parsed = line.trim().split(";");
@@ -92,17 +93,34 @@ public class ReadBalance{
         Integer totalFlow = 0;
         Integer totalBalance = 0;
         Integer totalSpending = 0;
-        for (BalanceFlow balanceFlow : listBalance) {
-            if(balanceFlow.getDate().before(current_date)|| balanceFlow.getDate() == current_date) totalBalance+= balanceFlow.getBalance();
-            if(balanceFlow.getDate().getMonth() == current_date.getMonth()){
-                 totalFlow+=balanceFlow.getBalance();
-                 if(balanceFlow.getBalance() < 0){
-                     totalSpending+=balanceFlow.getBalance();
+        for (BalanceFlow balance_flow : listBalance) {
+            if(balance_flow.getDate().before(current_date)|| balance_flow.getDate() == current_date) totalBalance+= balance_flow.getBalance();
+            if(balance_flow.getDate().getMonth() == current_date.getMonth()){
+                 totalFlow+=balance_flow.getBalance();
+                 if(balance_flow.getBalance() < 0){
+                     totalSpending+=balance_flow.getBalance();
                  }
             }
         }
         Integer[] stats = {totalFlow, totalSpending, totalBalance};
         return stats;
+    }
+
+    public void fetchThisMonthBalance() throws FileNotFoundException {
+        current_month_list = new ArrayList<BalanceFlow>();
+        Date current_date = new Date();
+        for (BalanceFlow balance_flow: listBalance) {
+            Date record_date = balance_flow.getDate();
+            if(record_date.getMonth() == current_date.getMonth() && record_date.getYear() == current_date.getYear()){
+                current_month_list.add(balance_flow);
+            }
+        }
+        Collections.sort(current_month_list, new CustomComparator());
+    }
+
+    public List<BalanceFlow> getThisMonthBalance(String mode){
+        if(mode=="desc") Collections.reverse(current_month_list);
+        return current_month_list;
     }
 
     public Integer getLastId() {

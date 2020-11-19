@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.octavius.spendwatch.balanceflow.BalanceProfile;
 import com.octavius.spendwatch.balanceflow.ModifyBalance;
 import com.octavius.spendwatch.balanceflow.WriteBalance;
 
@@ -27,9 +28,10 @@ import java.util.Date;
 public class EditActivity extends AppCompatActivity {
     private WriteBalance wb;
     private ModifyBalance mb;
-    private String desc;
+    private String desc, file_name;
     private Integer id, balance;
     private Date date;
+    private BalanceProfile bp;
 
     private EditText et_desc, et_balance;
     private TextView tv_id, tv_error;
@@ -41,13 +43,19 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            wb = new WriteBalance(getApplicationContext());
+            bp = new BalanceProfile(getApplicationContext());
+            file_name = bp.getConfigFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            wb = new WriteBalance(getApplicationContext(), file_name);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            mb = new ModifyBalance(getApplicationContext());
+            mb = new ModifyBalance(getApplicationContext(), file_name);
         } catch (IOException e) {
             e.printStackTrace();
         }

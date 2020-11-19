@@ -14,9 +14,9 @@ public class WriteBalance{
     private FileWriter writer; 
     private File file, path;
 
-    public WriteBalance(Context context) throws FileNotFoundException, IOException{
+    public WriteBalance(Context context, String file_name) throws FileNotFoundException, IOException{
         path = new File(context.getFilesDir().getPath()+"/balance");
-        file = new File(context.getFilesDir().getPath()+ "/balance/BalanceFlow.txt");
+        file = new File(context.getFilesDir().getPath()+ "/balance/" + file_name + ".txt");
         Log.i("File", "go");
         if(!path.exists()){
             path.mkdirs();

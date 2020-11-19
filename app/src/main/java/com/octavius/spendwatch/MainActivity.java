@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.stats_menu:
                 fragment = new StatisticFragment();
                 break;
+            case R.id.profile_menu:
+                fragment = new ProfileFragment();
+                break;
             default:
                 return false;
 
