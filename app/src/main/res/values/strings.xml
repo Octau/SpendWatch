@@ -12,4 +12,9 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="title_activity_edit">EditActivity</string>
+    <string name="desc">Description</string>
+    <string name="balance">Balance</string>
+    <string name="input_balance">Input Balance here</string>
+    <string name="date">Date</string>
+    <string name="input_error">Semua input harus diisi.</string>
 </resources>

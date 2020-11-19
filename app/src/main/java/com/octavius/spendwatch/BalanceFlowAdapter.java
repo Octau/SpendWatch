@@ -2,7 +2,6 @@ package com.octavius.spendwatch;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.octavius.spendwatch.balanceflow.BalanceFlow;
 import com.octavius.spendwatch.balanceflow.ModifyBalance;
-
-import java.util.ArrayList;
 
 public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements View.OnClickListener
 {
@@ -53,13 +48,13 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
-            viewHolder.id = (TextView) convertView.findViewById(R.id.tv_id);
-            viewHolder.date = (TextView) convertView.findViewById(R.id.tv_date);
-            viewHolder.desc = (TextView) convertView.findViewById(R.id.tv_desc_info);
-            viewHolder.prefix = (TextView) convertView.findViewById(R.id.tv_prefix);
-            viewHolder.balance = (TextView) convertView.findViewById(R.id.tv_balance_info);
-            viewHolder.delete = (ImageView) convertView.findViewById(R.id.btn_delete);
-            viewHolder.edit = (ImageView) convertView.findViewById(R.id.btn_edit);
+            viewHolder.et_id =  convertView.findViewById(R.id.tv_id);
+            viewHolder.et_date =  convertView.findViewById(R.id.tv_date);
+            viewHolder.tv_desc =  convertView.findViewById(R.id.tv_desc_info);
+            viewHolder.et_prefix =  convertView.findViewById(R.id.tv_prefix);
+            viewHolder.et_balance =  convertView.findViewById(R.id.tv_balance_info);
+            viewHolder.iv_delete =  convertView.findViewById(R.id.btn_delete);
+            viewHolder.iv_edit =  convertView.findViewById(R.id.btn_edit);
             convertView.setTag(viewHolder);
         }
         else{
@@ -67,25 +62,25 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
         }
         lastPosition = position;
 
-        viewHolder.id.setText(bf.getId().toString());
+        viewHolder.et_id.setText(bf.getId().toString());
 
-        viewHolder.desc.setText(bf.getDesc());
-        viewHolder.balance.setText(Integer.toString(Math.abs(bf.getBalance())));
-        viewHolder.date.setText(sdf.format(bf.getDate()));
+        viewHolder.tv_desc.setText(bf.getDesc());
+        viewHolder.et_balance.setText(Integer.toString(Math.abs(bf.getBalance())));
+        viewHolder.et_date.setText(sdf.format(bf.getDate()));
 
         //viewHolder.date.setText(bf.getDate().toString());
         //viewHolder.balance.setText(Math.abs(bf.getBalance()));
         if(bf.getBalance() > 0) {
-            viewHolder.prefix.setText("+ Rp");
-            viewHolder.prefix.setTextColor(getContext().getColor(R.color.colorBalanceGreen));
-            viewHolder.balance.setTextColor(getContext().getColor(R.color.colorBalanceGreen));
+            viewHolder.et_prefix.setText("+ Rp");
+            viewHolder.et_prefix.setTextColor(getContext().getColor(R.color.colorBalanceGreen));
+            viewHolder.et_balance.setTextColor(getContext().getColor(R.color.colorBalanceGreen));
         }
         else if(bf.getBalance() < 0){
-            viewHolder.prefix.setText("-Rp");
-            viewHolder.prefix.setTextColor(getContext().getColor(R.color.colorBalanceRed));
-            viewHolder.balance.setTextColor(getContext().getColor(R.color.colorBalanceRed));
+            viewHolder.et_prefix.setText("-Rp");
+            viewHolder.et_prefix.setTextColor(getContext().getColor(R.color.colorBalanceRed));
+            viewHolder.et_balance.setTextColor(getContext().getColor(R.color.colorBalanceRed));
         }
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+        viewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -94,7 +89,7 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
                     e.printStackTrace();
                 }
                 try {
-                    mb.deleteLine(Integer.parseInt(viewHolder.id.getText().toString()));
+                    mb.deleteLine(Integer.parseInt(viewHolder.et_id.getText().toString()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -102,11 +97,11 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
             }
         });
         Intent newActivity1 = new Intent(this.getContext() , AddActivity.class);
-        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+        viewHolder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("ListViewEdit", "onClick: edit");
-                openActivity(Integer.parseInt(viewHolder.id.getText().toString()), viewHolder.desc.getText().toString(), Integer.parseInt(viewHolder.balance.getText().toString()), viewHolder.date.getText().toString());
+                openActivity(Integer.parseInt(viewHolder.et_id.getText().toString()), viewHolder.tv_desc.getText().toString(), Integer.parseInt(viewHolder.et_balance.getText().toString()), viewHolder.et_date.getText().toString());
             }
         });
         return convertView;
@@ -121,8 +116,8 @@ public class BalanceFlowAdapter extends ArrayAdapter<BalanceFlow> implements Vie
         getContext().startActivity(intent_edit);
     }
     private static class ViewHolder {
-        private TextView desc, prefix, balance, id, date;
-        private ImageView delete, edit;
+        private TextView tv_desc, et_prefix, et_balance, et_id, et_date;
+        private ImageView iv_delete, iv_edit;
     }
 
 }

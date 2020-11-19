@@ -32,7 +32,7 @@ public class EditActivity extends AppCompatActivity {
     private Date date;
 
     private EditText et_desc, et_balance;
-    private TextView tv_id;
+    private TextView tv_id, tv_error;
     private DatePicker dp_date;
     private String blockCharacterSet = ";";
     @Override
@@ -52,8 +52,9 @@ public class EditActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        tv_error = findViewById(R.id.error_container);
         et_desc = (EditText)findViewById(R.id.et_desc);
-        et_desc.setFilters(new InputFilter[]{filter});
+        et_desc.setFilters(new InputFilter[]{filter ,new InputFilter.LengthFilter(20)});
         et_balance = (EditText) findViewById(R.id.et_balance);
         dp_date = (DatePicker)findViewById(R.id.dp_date);
         dp_date.setMaxDate(Calendar.getInstance().getTimeInMillis());
@@ -109,14 +110,18 @@ public class EditActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 // User chose the "Settings" item, show the app settings UI...
-                try {
-                    mb.editLine(id, et_desc.getText().toString(), Integer.parseInt(et_balance.getText().toString()), dp_date.getDayOfMonth() + "-" + (Integer)(dp_date.getMonth()+1) + "-" + dp_date.getYear());
-                } catch (IOException e) {
-                    Log.e("Error", e.toString() );
-                    e.printStackTrace();
+                if(et_desc.getText().toString().isEmpty() || et_balance.getText().toString().isEmpty())
+                    tv_error.setTextSize(15);
+                else{
+                    try {
+                        mb.editLine(id, et_desc.getText().toString(), Integer.parseInt(et_balance.getText().toString()), dp_date.getDayOfMonth() + "-" + (Integer)(dp_date.getMonth()+1) + "-" + dp_date.getYear());
+                    } catch (IOException e) {
+                        Log.e("Error", e.toString() );
+                        e.printStackTrace();
+                    }
+                    finish();
+                    return true;
                 }
-                finish();
-                return true;
 
             default:
                 // If we got here, the user's action was not recognized.

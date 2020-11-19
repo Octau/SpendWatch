@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.octavius.spendwatch.balanceflow.ReadBalance;
 import com.octavius.spendwatch.balanceflow.WriteBalance;
@@ -21,17 +22,17 @@ import java.util.Calendar;
 public class AddActivity extends AppCompatActivity{
     private ReadBalance rb;
     private WriteBalance wb;
-    private EditText desc, balance;
-    private DatePicker date;
+    private EditText et_desc, et_balance;
+    private DatePicker dp_date;
     private SimpleDateFormat sdf;
-
-    private String blockCharacterSet = ";";
+    private TextView tv_error;
+    private String block_character_set = ";";
 
     private InputFilter filter = new InputFilter() {
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            if (source != null && blockCharacterSet.contains(("" + source))) {
+            if (source != null && block_character_set.contains(("" + source))) {
                 return "";
             }
             return null;
@@ -50,13 +51,14 @@ public class AddActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        rb.getArrayListBalance();
+        rb.getArrayListBalance("");
 
-        desc = findViewById(R.id.et_desc);
-        desc.setFilters(new InputFilter[]{filter});
-        balance = findViewById(R.id.et_balance);
-        date = findViewById(R.id.dp_date);
-        date.setMaxDate(Calendar.getInstance().getTimeInMillis());
+        tv_error = findViewById(R.id.error_container);
+        et_desc = findViewById(R.id.et_desc);
+        et_desc.setFilters(new InputFilter[]{filter ,new InputFilter.LengthFilter(20)});
+        et_balance = findViewById(R.id.et_balance);
+        dp_date = findViewById(R.id.dp_date);
+        dp_date.setMaxDate(Calendar.getInstance().getTimeInMillis());
         sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
             wb = new WriteBalance(getApplicationContext());//show back button
@@ -83,10 +85,14 @@ public class AddActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
+                if(et_desc.getText().toString().isEmpty() || et_balance.getText().toString().isEmpty())
+                    tv_error.setTextSize(15);
                 // User chose the "Settings" item, show the app settings UI...
-                wb.addBalance(rb.getLastId()+1, desc.getText().toString(), Integer.parseInt(balance.getText().toString()), date.getDayOfMonth() + "-" + (Integer)(date.getMonth()+1) + "-" + date.getYear());
-                finish();
-                return true;
+                else{
+                    wb.addBalance(rb.getLastId()+1, et_desc.getText().toString(), Integer.parseInt(et_balance.getText().toString()), dp_date.getDayOfMonth() + "-" + (Integer)(dp_date.getMonth()+1) + "-" + dp_date.getYear());
+                    finish();
+                    return true;
+                }
 
             default:
                 // If we got here, the user's action was not recognized.

@@ -1,12 +1,10 @@
 package com.octavius.spendwatch;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -19,10 +17,9 @@ import com.octavius.spendwatch.balanceflow.ReadBalance;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class HistoryFragment extends Fragment {
-    private ArrayList<BalanceFlow> daftar;
+    private ArrayList<BalanceFlow> list_balance_flow;
     private ListView listView;
     private BalanceFlowAdapter adapter;
     private ReadBalance rb;
@@ -38,7 +35,7 @@ public class HistoryFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        daftar = rb.getArrayListBalance();
+        list_balance_flow = rb.getArrayListBalance("desc");
 
         return view;
     }
@@ -51,14 +48,14 @@ public class HistoryFragment extends Fragment {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        daftar = null;
-        daftar = rb.getArrayListBalance();
-        if(daftar == null) Log.i("list", "null");
-        for (BalanceFlow item: daftar) {
+        list_balance_flow = null;
+        list_balance_flow = rb.getArrayListBalance("desc");
+        if(list_balance_flow == null) Log.i("list", "null");
+        for (BalanceFlow item: list_balance_flow) {
             Log.i("item", "onResume: " + item.getDesc());
         }
         listView.setAdapter(null);
-        adapter = new BalanceFlowAdapter(daftar, getContext());
+        adapter = new BalanceFlowAdapter(list_balance_flow, getContext());
         listView.setAdapter(adapter);
 
     }

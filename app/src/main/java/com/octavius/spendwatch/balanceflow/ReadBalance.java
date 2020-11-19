@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Date;
@@ -43,10 +45,14 @@ public class ReadBalance{
         this.addToListBalance();
     }
 
-    public List<BalanceFlow> getListBalance(){
+    public List<BalanceFlow> getListBalance(String mode){
+        if(mode=="desc") Collections.reverse(listBalance);
         return listBalance;
     }
-    public ArrayList<BalanceFlow> getArrayListBalance(){return arrayListBalance;}
+    public ArrayList<BalanceFlow> getArrayListBalance(String mode){
+        if(mode=="desc") Collections.reverse(arrayListBalance);
+        return arrayListBalance;
+    }
 
     private void addToListBalance(){
         Integer n=0;
@@ -70,6 +76,9 @@ public class ReadBalance{
         }
         lastId = tmp;
         Log.i("FETCH", "fetched " + n + " line");
+
+        Collections.sort(listBalance, new CustomComparator());
+        Collections.sort(arrayListBalance, new CustomComparator());
     }
 
     public void refreshList() throws FileNotFoundException {
@@ -98,6 +107,13 @@ public class ReadBalance{
 
     public Integer getLastId() {
         return lastId;
+    }
+
+    public class CustomComparator implements Comparator<BalanceFlow> {
+        @Override
+        public int compare(BalanceFlow o1, BalanceFlow o2) {
+            return o1.getDate().compareTo(o2.getDate());
+        }
     }
 }
 

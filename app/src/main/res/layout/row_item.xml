@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tv_date"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="0dp"
         android:layout_marginLeft="20dp"/>
     <ImageView
         android:id="@+id/btn_edit"
