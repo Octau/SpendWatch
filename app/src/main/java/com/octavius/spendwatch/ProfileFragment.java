@@ -1,5 +1,6 @@
 package com.octavius.spendwatch;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,21 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        rv_profile = view.findViewById(R.id.rv_profile);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            refreshRecycleView();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshRecycleView() throws IOException {
         list_profile = new ArrayList<Profile>();
         try {
             bp = new BalanceProfile(getContext());
@@ -38,11 +54,11 @@ public class ProfileFragment extends Fragment {
                 list_profile.add(new Profile(file_name));
             }
         }
-        rv_profile = view.findViewById(R.id.rv_profile);
-
-        adapter = new RecycleViewAdapter(getContext(), list_profile);
+        rv_profile.setAdapter(null);
+        adapter = new RecycleViewAdapter(this, list_profile);
         rv_profile.setAdapter(adapter);
-        rv_profile.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        return view;
+        rv_profile.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        getActivity().setTitle("Profile " + bp.getConfigFile());
     }
+
 }

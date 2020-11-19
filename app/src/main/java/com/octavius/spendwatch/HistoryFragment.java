@@ -35,6 +35,7 @@ public class HistoryFragment extends Fragment {
         try {
             bp = new BalanceProfile(getContext());
             file_name = bp.getConfigFile();
+            getActivity().setTitle("Profile " + file_name);
         } catch (IOException e) {
             e.printStackTrace();
         }

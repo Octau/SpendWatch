@@ -18,4 +18,9 @@
     <string name="input_balance">Input Balance here</string>
     <string name="date">Date</string>
     <string name="input_error">Semua input harus diisi.</string>
+    <string name="profile_add">Add Profile</string>
+    <array name="profile_choice">
+        <item name="rename">Rename</item>
+        <item name="delete">Delete</item>
+    </array>
 </resources>
