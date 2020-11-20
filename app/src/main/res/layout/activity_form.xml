@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="5dp"
             android:text="@string/desc"/>
         <EditText
             android:id="@+id/et_desc"
@@ -18,53 +19,46 @@
             android:hint="@string/desc"
             android:inputType="text"
             android:maxLength="10"
-            android:importantForAutofill="no"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+            android:importantForAutofill="no"
+            android:layout_marginTop="5dp"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/balance"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/balance"
+            android:layout_marginTop="5dp"/>
         <EditText
             android:id="@+id/et_balance"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/input_balance"
             android:maxLength="9"
             android:ems="17"
             android:inputType="numberSigned"
-            android:importantForAutofill="no"/>
+            android:importantForAutofill="no"
+            android:layout_marginTop="5dp"/>
 
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/date"
+            android:layout_marginTop="5dp"/>
         <DatePicker
             android:id="@+id/dp_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:datePickerMode="spinner"
-            android:calendarViewShown="false"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+            android:calendarViewShown="false"
+            android:layout_marginTop="5dp"/>
         <TextView
             android:id="@+id/error_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/input_error"
             android:textColor="@color/colorBalanceRed"
-            android:textSize="0sp"/>
-    </LinearLayout>
-
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="0sp"
+            android:layout_marginTop="5dp"/>
 </LinearLayout>

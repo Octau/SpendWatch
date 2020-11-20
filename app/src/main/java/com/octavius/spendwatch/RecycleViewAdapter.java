@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -59,6 +60,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 try {
                     bp = new BalanceProfile(v.getContext());
                     bp.setDefaultFile(mData.get(position).getName());
+                    fragment.refreshRecycleView();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -85,24 +87,31 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                                     public void onClick(DialogInterface dialog, int which) {
                                         Dialog f = (Dialog) dialog;
                                         EditText et_new_file = f.findViewById(R.id.et_filename);
+                                        TextView tv_error = f.findViewById(R.id.tv_file_error);
                                         String new_file_name = et_new_file.getText().toString();
-                                        try {
-                                            bp = new BalanceProfile(mContext);
-                                            Log.i(TAG, "onClick: name= " + mData.get(position).getName().trim());
-                                            Log.i(TAG, "onClick: name= " + bp.getConfigFile());
-                                            if(mData.get(position).getName().trim().equals(bp.getConfigFile())){
-                                                Log.i(TAG, "onClick: set default file");
-                                                bp.setDefaultFile(new_file_name);
+                                        String value = "";
+                                        if(!(new_file_name.trim().isEmpty()) || !new_file_name.trim().equals("")){
+                                            try {
+                                                bp = new BalanceProfile(mContext);
+                                                if(mData.get(position).getName().trim().equals(bp.getConfigFile())){
+                                                    Log.i(TAG, "onClick: set default file");
+                                                    bp.setDefaultFile(new_file_name);
+                                                }
+                                                bp.renameProfile(mData.get(position).getName(), new_file_name);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
                                             }
-                                            bp.renameProfile(mData.get(position).getName(), new_file_name);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                            Log.i(TAG, "onClick: new name " + new_file_name);
+                                            try {
+                                                fragment.refreshRecycleView();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                        Log.i(TAG, "onClick: new name " + new_file_name);
-                                        try {
-                                            fragment.refreshRecycleView();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                        else{
+                                            Toast.makeText(mContext, "Profile name can't be empty",
+                                                    Toast.LENGTH_SHORT).show();
+                                            Log.i(TAG, "onClick: Filename is empty");
                                         }
                                     }
                                 }).setNegativeButton("Cancel", null).show();
@@ -116,7 +125,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                                         try {
                                             bp = new BalanceProfile(mContext);
                                             bp.deleteProfile((String)mData.get(position).getName());
-                                            bp.createDefaultFile();
+                                            if(mData.get(position).getName().equals(bp.getConfigFile()))
+                                                bp.createDefaultFile();
+                                                fragment.refreshRecycleView();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

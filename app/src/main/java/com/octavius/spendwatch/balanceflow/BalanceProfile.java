@@ -68,13 +68,6 @@
             }
         }
 
-        public Boolean deleteFile(String file_name){
-            file = new File(dir.getAbsolutePath() + "/" + file_name + ".txt");
-            if(file.exists()){
-                file.delete();
-            }
-            return true;
-        }
 
         public void setDefaultFile(String file_name) throws IOException {
             FileWriter writer = new FileWriter(config_file,false);
@@ -106,6 +99,23 @@
                 }
                 Log.i(TAG, "getConfigFile: fetched file" + file_name);
                 return file_name;
+            }
+        }
+
+        public String createProfile(String file_name) throws IOException {
+            String error = "";
+            File new_file = new File(context.getFilesDir().getPath() + "/balance/" + file_name + ".txt" );
+            if(new_file.exists()){
+                error = "File with same name already exists";
+                return error;
+            }
+            else if(new_file.createNewFile()){
+                Log.i(TAG, "createProfile: success");
+                return error;
+            }
+            else{
+                error = "Failed to create new file";
+                return error;
             }
         }
 
