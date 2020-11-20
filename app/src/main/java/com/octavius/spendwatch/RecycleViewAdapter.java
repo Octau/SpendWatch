@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.octavius.spendwatch.balanceflow.BalanceProfile;
 import com.octavius.spendwatch.balanceflow.Profile;
+import com.octavius.spendwatch.balanceflow.WriteBalance;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.CustomViewHolder> {
     private final String TAG = "RecycleViewAdapter";
+    private WriteBalance wb;
     private ProfileFragment fragment;
     private Context mContext;
     private List<Profile> mData;
@@ -90,9 +92,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                                     public void onClick(DialogInterface dialog, int which) {
                                         Dialog f = (Dialog) dialog;
                                         EditText et_new_file = f.findViewById(R.id.et_filename);
-                                        TextView tv_error = f.findViewById(R.id.tv_file_error);
                                         String new_file_name = et_new_file.getText().toString();
-                                        String value = "";
                                         if(!(new_file_name.trim().isEmpty()) || !new_file_name.trim().equals("")){
                                             try {
                                                 bp = new BalanceProfile(mContext);
@@ -131,13 +131,21 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                                             bp = new BalanceProfile(mContext);
                                             String error = bp.deleteProfile(profile_name);
                                             if(error.equals("")){
-                                                if(profile_name.equals(bp.getConfigFile())) bp.createDefaultFile();
-                                                fragment.refreshRecycleView();
+                                                if(profile_name.equals(bp.getConfigFile())) {
+                                                    bp.createDefaultFile();
+                                                    if(bp.fetchListFile()){
+                                                        if(bp.getListName().size() <1) wb = new WriteBalance(mContext, bp.getConfigFile());
+                                                    }
+                                                }
+
                                                 Toast.makeText(mContext, "Deleted " + profile_name,
                                                         Toast.LENGTH_SHORT).show();
+
+                                                fragment.refreshRecycleView();
                                             }
                                             else Toast.makeText(mContext, error,
                                                     Toast.LENGTH_SHORT).show();
+
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
