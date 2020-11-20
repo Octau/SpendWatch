@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add"
-        android:title="Add"
+        android:title="Add balance"
         app:showAsAction="always"/>
 </menu>

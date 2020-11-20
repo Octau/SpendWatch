@@ -52,15 +52,18 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final CustomViewHolder holder, final int position) {
-        holder.tv_profile.setText(mData.get(position).getName());
+        final String profile_name = mData.get(position).getName();
+        holder.tv_profile.setText(profile_name);
         holder.cv_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: ");
                 try {
                     bp = new BalanceProfile(v.getContext());
-                    bp.setDefaultFile(mData.get(position).getName());
+                    bp.setDefaultFile(profile_name);
                     fragment.refreshRecycleView();
+                        Toast.makeText(mContext, "Switched profile to " + profile_name,
+                            Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,7 +85,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             case 0:
                                 AlertDialog.Builder builder_rename = new AlertDialog.Builder(mContext);
 
-                                builder_rename.setMessage("Renaming " + mData.get(position).getName() + " Profile").setView(R.layout.dialog_rename_profile).setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                                builder_rename.setMessage("Renaming " + profile_name + " Profile").setView(R.layout.dialog_rename_profile).setPositiveButton("Rename", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Dialog f = (Dialog) dialog;
@@ -93,20 +96,22 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                                         if(!(new_file_name.trim().isEmpty()) || !new_file_name.trim().equals("")){
                                             try {
                                                 bp = new BalanceProfile(mContext);
-                                                if(mData.get(position).getName().trim().equals(bp.getConfigFile())){
-                                                    Log.i(TAG, "onClick: set default file");
-                                                    bp.setDefaultFile(new_file_name);
+                                                String error = bp.renameProfile(profile_name, new_file_name);
+                                                if(error.equals("")) {
+                                                    if(profile_name.trim().equals(bp.getConfigFile())){
+                                                        Log.i(TAG, "onClick: set default file");
+                                                        bp.setDefaultFile(new_file_name);
+                                                    }
                                                 }
-                                                bp.renameProfile(mData.get(position).getName(), new_file_name);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                            Log.i(TAG, "onClick: new name " + new_file_name);
-                                            try {
+                                                else{
+                                                    Toast.makeText(mContext, error,
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
                                                 fragment.refreshRecycleView();
                                             } catch (IOException e) {
                                                 e.printStackTrace();
                                             }
+                                            Log.i(TAG, "onClick: new name " + new_file_name);
                                         }
                                         else{
                                             Toast.makeText(mContext, "Profile name can't be empty",
@@ -119,20 +124,20 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                                 break;
                             case 1:
                                 AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
-                                builder.setTitle("Deleting " + mData.get(position).getName()).setMessage("Are you sure you want to delete this profile?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                builder.setTitle("Deleting " + profile_name).setMessage("Are you sure you want to delete this profile?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         try {
                                             bp = new BalanceProfile(mContext);
-                                            bp.deleteProfile((String)mData.get(position).getName());
-                                            if(mData.get(position).getName().equals(bp.getConfigFile()))
-                                                bp.createDefaultFile();
+                                            String error = bp.deleteProfile(profile_name);
+                                            if(error.equals("")){
+                                                if(profile_name.equals(bp.getConfigFile())) bp.createDefaultFile();
                                                 fragment.refreshRecycleView();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                        try {
-                                            fragment.refreshRecycleView();
+                                                Toast.makeText(mContext, "Deleted " + profile_name,
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                            else Toast.makeText(mContext, error,
+                                                    Toast.LENGTH_SHORT).show();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }

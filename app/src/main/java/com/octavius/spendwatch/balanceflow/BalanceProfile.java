@@ -119,23 +119,35 @@
             }
         }
 
-        public void renameProfile(String old_file, String new_file){
+        public String renameProfile(String old_file, String new_file){
             String error="";
             File _old_file = new File(context.getFilesDir().getPath() + "/balance/" + old_file + ".txt");
             File _new_file = new File(context.getFilesDir().getPath() + "/balance/" + new_file + ".txt");
-            if(_old_file.renameTo(_new_file)){
-                Log.i(TAG, "renameProfile: Success");
+            if(_new_file.exists()){
+                error = "File with same name already exists.";
             }
-            else
-                Log.i(TAG, "renameProfile: Failed");
+            else{
+                if(_old_file.renameTo(_new_file)){
+                    Log.i(TAG, "renameProfile: Success");
+                }
+                else
+                    error = "Failed to rename profile";
+                    Log.i(TAG, "renameProfile: Failed");
+
+            }
+            return error;
         }
 
-        public Boolean deleteProfile(String file_name){
+        public String deleteProfile(String file_name){
+            String error = "";
             file = new File(context.getFilesDir().getPath() + "/balance/" + file_name + ".txt");
             if(file.exists()){
                 file.delete();
                 Log.i(TAG, "deleteProfile: Profile successfully deleted");
             }
-            return true;
+            else{
+                error = "File does not exists.";
+            }
+            return error;
         }
     }
